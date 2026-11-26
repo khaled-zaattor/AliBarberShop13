@@ -66,7 +66,7 @@
         <div class="section location">
             <h3>Location</h3>
             <p style="margin: 0 0 8px; font-size: 14px;">
-                <a href="https://maps.google.com/?q=Ali%27s+Barbershop+4201+62nd+St+N+Unit+9+Pinellas+Park+FL+33781" target="_blank" rel="noopener noreferrer">
+                <a href="https://maps.google.com/?cid=15098769549046085973" target="_blank" rel="noopener noreferrer">
                     Ali's Barbershop, 4201 62nd North Unit 9, Pinellas Park, FL 33781
                 </a>
             </p>
