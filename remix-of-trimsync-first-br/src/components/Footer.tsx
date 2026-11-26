@@ -1,5 +1,6 @@
 import { BUSINESS, addressLine } from "@/data/business";
 import { SERVICE_PAGES } from "@/data/services";
+import { AREAS, areaPath } from "@/data/areas";
 
 // __BUILD_YEAR__ is injected by vite.config.ts. Calling new Date().getFullYear()
 // in the render body baked the build year into the prerendered HTML, so a client
@@ -14,7 +15,7 @@ const Footer = () => {
           internal links at all, so every page was a dead end for a crawler. */}
       <nav
         aria-label="Footer"
-        className="max-w-[1400px] mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-10 border-b border-primary-foreground/10 pb-10 mb-10"
+        className="max-w-[1400px] mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-10 border-b border-primary-foreground/10 pb-10 mb-10"
       >
         <div>
           <h2 className="font-display text-primary-foreground text-sm uppercase tracking-[0.2em]">
@@ -60,12 +61,38 @@ const Footer = () => {
 
         <div>
           <h2 className="font-display text-primary-foreground text-sm uppercase tracking-[0.2em]">
+            Areas We Serve
+          </h2>
+          <ul className="mt-4 space-y-2 list-none p-0">
+            {AREAS.map((a) => (
+              <li key={a.slug}>
+                <a
+                  href={areaPath(a)}
+                  className="font-body text-primary-foreground/50 text-sm hover:text-primary-foreground transition-colors"
+                >
+                  Barber near {a.name}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                href="/areas/"
+                className="font-body text-primary-foreground/50 text-sm hover:text-primary-foreground transition-colors"
+              >
+                All areas →
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="font-display text-primary-foreground text-sm uppercase tracking-[0.2em]">
             Hours
           </h2>
           <ul className="mt-4 space-y-2 list-none p-0 font-body text-primary-foreground/50 text-sm">
-            <li>Tue–Fri: 8:30 AM – 5:30 PM</li>
-            <li>Sat: 9:00 AM – 4:00 PM</li>
-            <li>Sun &amp; Mon: Closed</li>
+            <li>Mon–Fri: 9:00 AM – 8:00 PM</li>
+            <li>Sat: 9:00 AM – 7:00 PM</li>
+            <li>Sun: 9:00 AM – 3:00 PM</li>
           </ul>
           <a
             href="/#booking"

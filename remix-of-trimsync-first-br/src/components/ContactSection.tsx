@@ -14,8 +14,8 @@ function fmt(t: string): string {
 }
 
 // Groups consecutive days with identical hours into display rows
-// e.g. [{day:2,open:"08:30",close:"17:30"}, {day:3,...}, ...]
-// → ["Tue–Fri: 8:30 AM – 5:30 PM", "Sat: Closed", ...]
+// e.g. [{day:1,open:"09:00",close:"20:00"}, {day:2,...}, ...]
+// → ["Sun: 9:00 AM – 3:00 PM", "Mon–Fri: 9:00 AM – 8:00 PM", "Sat: 9:00 AM – 7:00 PM"]
 function buildHoursRows(hours: BusinessHours[]): string[] {
   if (!hours.length) return [];
 

@@ -1,0 +1,9 @@
+app/Models/Client.php
+app/Models/ClientIdentifier.php
+app/Models/Appointment.php
+app/Services/ClientService.php
+app/Services/AppointmentService.php
+app/Http/Controllers/Api/Admin/AppointmentController.php
+app/Http/Resources/AppointmentResource.php
+database/migrations/2026_11_05_000001_create_clients_table.php
+database/migrations/2026_11_05_000002_drop_client_visit_counts_tables.php

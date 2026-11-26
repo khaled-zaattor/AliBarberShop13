@@ -14,9 +14,11 @@ export interface AboutData {
   /** Full professional name, for entity disambiguation. Owner must confirm. */
   fullName: string | null;
   jobTitle: string;
-  /** Years working as a barber before opening the shop in Pinellas Park. */
-  yearsExperienceAbroad: number | null;
+  /** Total years as a barber, approximate — always displayed as "nearly N". */
+  yearsExperience: number | null;
   photo: { src: string; alt: string; width: number; height: number } | null;
+  /** Heading shown above the bio. */
+  bioHeading: string;
   bio: string[];
   specialties: string[];
   languages: string[];
@@ -28,9 +30,9 @@ export const ABOUT: AboutData = {
   // "ALIS BARBERSHOP LLC" and "Ali's Barbershop" interchangeably — see
   // SEO-OFFSITE-CHECKLIST.md. Pick one and use it everywhere.
   jobTitle: "Barber",
-  // Confirmed by the owner: eight years in barbershops outside the US. Worded
-  // on the page as experience abroad — not as total years — so it stays true.
-  yearsExperienceAbroad: 8,
+  // Confirmed by the owner: nearly 15 years as a barber in total (started in
+  // 2012). Always shown with "nearly" so it stays true.
+  yearsExperience: 15,
   photo: {
     src: "/images/ali-barber.webp",
     alt: "Ali, barber at Ali's Barber Shop in Pinellas Park, FL",
@@ -38,11 +40,15 @@ export const ABOUT: AboutData = {
     height: 512,
   },
 
+  bioHeading: "Ali Zaatour – Owner & Barber 💈",
+
+  // Written by the owner, in his own words.
   bio: [
-    "Ali's Barber Shop is a neighbourhood barbershop on 62nd North in Pinellas Park, a short drive from Lealman, Kenneth City and north St. Petersburg. It's a small shop, recently renovated, and Ali works one client at a time.",
-    "Ali spent eight years working as a barber in shops outside the United States before bringing that experience to Pinellas Park. That's eight years of fades, beard work and scissor cuts on every kind of hair — and it shows in the details clients keep mentioning in their reviews.",
-    "His approach is straightforward: ask what you want before touching your hair, take the time the cut actually needs, and check the result with you before you get out of the chair. That sounds obvious. Judging by how often clients mention it, it isn't.",
-    "The other thing that sets the shop apart is language. Ali speaks both English and Arabic, which means clients who'd otherwise be describing a fade through a translation app can simply explain what they want. For a lot of families in the Pinellas Park and St. Petersburg area, that's the difference between a haircut they settled for and the one they asked for.",
+    "I’ve always believed that passion and determination can turn dreams into reality, and that even the hardest beginnings can lead to something beautiful.",
+    "In 2012, I had to leave my home country and start over in a neighboring country. It was there that I discovered my passion for barbering and began learning the craft I would come to love. With hard work and dedication, I opened my first barbershop in 2014.",
+    "At the end of 2024, my wife, our children, and I arrived in the United States to begin a new chapter. Starting over came with many challenges, from learning English and adjusting to a new culture to managing the high cost of living. But through it all, I never gave up on my dream of owning my own barbershop again.",
+    "In mid-2026, that dream finally became a reality. I proudly opened my own shop, bringing nearly 15 years of experience to a community I’ve grown to love and deeply respect.",
+    "To me, barbering is more than just a profession. It’s my passion, my art, and a way to connect with people. My goal is simple: to make every client feel welcome, valued, and confident every time they leave my chair.",
   ],
 
   specialties: [

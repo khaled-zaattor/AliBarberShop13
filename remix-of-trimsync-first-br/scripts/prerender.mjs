@@ -136,8 +136,8 @@ const mustContain = [
   ["the H1", "Barber Shop in Pinellas Park"],
   ["a service name", "Men's Haircut"],
   ["a price", "$30"],
-  ["the address", "4201 62nd North"],
-  ["opening hours", "8:30 AM"],
+  ["the address", "4201 62nd Ave N"],
+  ["opening hours", "9:00 AM"],
   ["structured data", "application/ld+json"],
   ["a canonical URL", 'rel="canonical"'],
 ];

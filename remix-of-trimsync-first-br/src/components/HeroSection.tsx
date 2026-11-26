@@ -90,7 +90,7 @@ const HeroSection = () => {
                   {service.name}
                 </span>
                 <span className="font-display text-primary-foreground text-xl md:text-2xl">
-                  ${service.price} & Up
+                  ${service.price}
                 </span>
               </div>
             ))}

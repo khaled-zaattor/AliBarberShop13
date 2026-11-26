@@ -10,7 +10,7 @@ use App\Models\Appointment;
 use App\Models\Barber;
 use App\Services\AvailabilityService;
 use App\Services\AppointmentService;
-use App\Services\ClientVisitCountService;
+use App\Services\ClientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -22,13 +22,13 @@ class AppointmentController extends Controller
 
     public function __construct(
         private readonly AppointmentService $appointmentService,
-        private readonly ClientVisitCountService $clientVisitCountService,
+        private readonly ClientService $clientService,
         private readonly AvailabilityService $availabilityService
     ) {}
 
     public function index(Request $request): JsonResponse
     {
-        $query = Appointment::with(['barber', 'service', 'services'])
+        $query = Appointment::with(['barber', 'service', 'services', 'client'])
             ->orderBy('appointment_date', 'desc')
             ->orderBy('appointment_time', 'desc');
 
@@ -76,7 +76,7 @@ class AppointmentController extends Controller
         }
 
         $appointments = $query->paginate(15);
-        $this->clientVisitCountService->attachToAppointments($appointments->getCollection());
+        $this->clientService->attachVisitCounts($appointments->getCollection());
 
         return response()->json([
             'success' => true,
@@ -86,14 +86,15 @@ class AppointmentController extends Controller
 
     public function syncVisitCounts(): JsonResponse
     {
-        $result = $this->clientVisitCountService->sync();
+        // Visit counts update live; this links any appointment still missing a client.
+        $linked = $this->clientService->linkUnassignedAppointments();
 
         return response()->json([
             'success' => true,
             'message' => 'Client visit counts updated successfully.',
             'data' => [
-                ...$result,
-                'calculated_at' => $result['calculated_at']->toISOString(),
+                'linked_appointments' => $linked,
+                'calculated_at'       => now()->toISOString(),
             ],
         ]);
     }
@@ -105,8 +106,8 @@ class AppointmentController extends Controller
             abort_if(!$authBarber || $appointment->barber_id !== $authBarber->id, 403, 'Forbidden.');
         }
 
-        $appointment->load(['barber', 'service', 'services', 'followUps']);
-        $this->clientVisitCountService->attachToAppointments(collect([$appointment]));
+        $appointment->load(['barber', 'service', 'services', 'client', 'followUps']);
+        $this->clientService->attachVisitCounts(collect([$appointment]));
 
         return response()->json([
             'success' => true,
@@ -158,10 +159,12 @@ class AppointmentController extends Controller
                 ], 409));
             }
 
+            $previousStatus = $appointment->status;
             $appointment->update($data);
+            $this->clientService->recordStatusChange($appointment, $previousStatus);
         }, 3);
-        $appointment->load(['barber', 'service', 'services']);
-        $this->clientVisitCountService->attachToAppointments(collect([$appointment]));
+        $appointment->load(['barber', 'service', 'services', 'client']);
+        $this->clientService->attachVisitCounts(collect([$appointment]));
 
         return response()->json([
             'success' => true,

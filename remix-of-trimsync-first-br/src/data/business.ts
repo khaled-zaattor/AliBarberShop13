@@ -29,11 +29,9 @@ export const BUSINESS = {
   email: "alisbarbershop2026@gmail.com",
 
   address: {
-    // Kept exactly as it reads on the site today. The postal-standard form is
-    // "4201 62nd Ave N, Unit 9" — switching is a one-line edit here, but it has
-    // to happen on the Google Business Profile in the same sitting or the
+    // Matches the Google Business Profile exactly. Change both together or the
     // listings disagree again.
-    street: "4201 62nd North Unit 9",
+    street: "4201 62nd Ave N, Unit 9",
     city: "Pinellas Park",
     region: "FL",
     postalCode: "33781",
@@ -52,12 +50,16 @@ export const BUSINESS = {
 
   // Pinellas Park is the primary entity-location relationship — the shop is
   // physically there, and distance is one of the three local ranking factors.
-  // The rest are genuine secondary service areas, ordered by proximity.
+  // The rest are genuine secondary service areas, ordered by proximity. Each
+  // has a page in src/data/areas.ts (Disston Heights is part of St. Petersburg,
+  // so it's covered by that entry here).
   areaServed: [
     "Pinellas Park, FL",
     "Lealman, FL",
     "Kenneth City, FL",
     "St. Petersburg, FL",
+    "Seminole, FL",
+    "Largo, FL",
   ],
 
   socials: {
@@ -84,11 +86,11 @@ export const addressLine = (): string =>
  * API is unreachable.
  */
 export const BUSINESS_HOURS: BusinessHours[] = [
-  { day_of_week: 0, is_closed: true, open_time: null, close_time: null, slot_duration: 30 },
-  { day_of_week: 1, is_closed: true, open_time: null, close_time: null, slot_duration: 30 },
-  { day_of_week: 2, is_closed: false, open_time: "08:30:00", close_time: "17:30:00", slot_duration: 30 },
-  { day_of_week: 3, is_closed: false, open_time: "08:30:00", close_time: "17:30:00", slot_duration: 30 },
-  { day_of_week: 4, is_closed: false, open_time: "08:30:00", close_time: "17:30:00", slot_duration: 30 },
-  { day_of_week: 5, is_closed: false, open_time: "08:30:00", close_time: "17:30:00", slot_duration: 30 },
-  { day_of_week: 6, is_closed: false, open_time: "09:00:00", close_time: "16:00:00", slot_duration: 30 },
+  { day_of_week: 0, is_closed: false, open_time: "09:00:00", close_time: "15:00:00", slot_duration: 30 },
+  { day_of_week: 1, is_closed: false, open_time: "09:00:00", close_time: "20:00:00", slot_duration: 30 },
+  { day_of_week: 2, is_closed: false, open_time: "09:00:00", close_time: "20:00:00", slot_duration: 30 },
+  { day_of_week: 3, is_closed: false, open_time: "09:00:00", close_time: "20:00:00", slot_duration: 30 },
+  { day_of_week: 4, is_closed: false, open_time: "09:00:00", close_time: "20:00:00", slot_duration: 30 },
+  { day_of_week: 5, is_closed: false, open_time: "09:00:00", close_time: "20:00:00", slot_duration: 30 },
+  { day_of_week: 6, is_closed: false, open_time: "09:00:00", close_time: "19:00:00", slot_duration: 30 },
 ];

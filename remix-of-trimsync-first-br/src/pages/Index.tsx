@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import MobileStickyBar from "@/components/MobileStickyBar";
 import SectionBoundary from "@/components/SectionBoundary";
 import ClientOnly from "@/components/ClientOnly";
+import BookingFallback from "@/components/BookingFallback";
 import { lazyWithRetry } from "@/lib/lazy-retry";
 import { type BookingSectionHandle } from "@/components/BookingSection";
 
@@ -37,9 +38,9 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <HeroSection />
-      <SectionBoundary name="booking">
-        <ClientOnly>
-          <Suspense fallback={null}>
+      <SectionBoundary name="booking" fallback={<BookingFallback failed />}>
+        <ClientOnly fallback={<BookingFallback />}>
+          <Suspense fallback={<BookingFallback />}>
             <BookingSection
               ref={bookingRef}
               onServicesChange={setServicesCount}

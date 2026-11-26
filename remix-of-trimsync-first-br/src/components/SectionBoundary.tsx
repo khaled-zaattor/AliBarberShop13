@@ -4,6 +4,8 @@ interface SectionBoundaryProps {
   /** Used in the log line and in the message shown to the visitor. */
   name: string;
   children: ReactNode;
+  /** Shown instead of the generic message when the section fails. */
+  fallback?: ReactNode;
 }
 
 /**
@@ -27,6 +29,7 @@ class SectionBoundary extends Component<
 
   render() {
     if (!this.state.failed) return this.props.children;
+    if (this.props.fallback !== undefined) return this.props.fallback;
 
     return (
       <section className="py-10 px-4 text-center">

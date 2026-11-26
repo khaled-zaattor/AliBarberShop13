@@ -1,27 +1,11 @@
 import { BUSINESS } from "@/data/business";
+import { AREAS, areaPath } from "@/data/areas";
 
 // Pinellas Park is the primary location relationship — the shop is physically
 // there, and distance is one of the three factors Google names for local
-// ranking. The others are genuine nearby service areas described honestly as
-// places clients travel from, not as separate locations. No doorway pages.
-const areas = [
-  {
-    name: "Pinellas Park",
-    body: "Where the shop is. 4201 62nd North, Unit 9 — free parking right outside, no meters.",
-  },
-  {
-    name: "Lealman",
-    body: "Immediately east of the shop. For most of Lealman this is the closest barbershop of its kind.",
-  },
-  {
-    name: "Kenneth City",
-    body: "A few minutes south down 62nd. Easy to fit around a lunch break.",
-  },
-  {
-    name: "St. Petersburg",
-    body: "About 15 minutes from downtown St. Pete and closer from the north side. A regular run for clients who'd rather not pay downtown prices.",
-  },
-];
+// ranking. The others are genuine nearby areas described honestly as places
+// clients travel from, each linking to its own directions page. The copy lives
+// in src/data/areas.ts so this section and those pages can't disagree.
 
 const ServiceAreaSection = () => {
   return (
@@ -31,24 +15,35 @@ const ServiceAreaSection = () => {
           Serving Pinellas Park &amp; Nearby
         </h2>
         <p className="font-body text-muted-foreground mt-4 max-w-2xl">
-          The shop is in Pinellas Park, Florida. These are the areas clients
-          regularly travel from.
+          The shop is in Pinellas Park, Florida, at 4201 62nd Ave N with free
+          parking right outside. These nearby areas are a short drive away.
         </p>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
-          {areas.map(({ name, body }) => (
-            <div key={name} className="border-t border-accent pt-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+          {AREAS.map((a) => (
+            <div key={a.slug} className="border-t border-accent pt-4">
               <h3 className="font-display text-secondary-foreground text-xl uppercase tracking-wide">
-                {name}
+                <a href={areaPath(a)} className="hover:text-accent transition-colors">
+                  {a.name}
+                </a>
               </h3>
               <p className="font-body text-muted-foreground text-sm leading-relaxed mt-2">
-                {body}
+                {a.summary}
               </p>
+              <a
+                href={areaPath(a)}
+                className="inline-block font-body text-sm text-accent hover:underline mt-2"
+              >
+                Barber near {a.name} →
+              </a>
             </div>
           ))}
         </div>
 
-        <p className="font-body text-muted-foreground text-sm mt-12">
+        <p className="font-body text-muted-foreground text-sm mt-12 flex flex-wrap gap-6">
+          <a href="/areas/" className="text-accent hover:underline">
+            All areas we serve →
+          </a>
           <a
             href={BUSINESS.mapsUrl}
             target="_blank"

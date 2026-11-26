@@ -40,8 +40,8 @@ a third of the authority.
 
 ### Address — pick one format
 
-The site currently says `4201 62nd North Unit 9`. The postal-standard form is
-`4201 62nd Ave N, Unit 9`. Other listings use both.
+The site now uses `4201 62nd Ave N, Unit 9`, matching Google. Other listings
+use other formats; update them to this exact string.
 
 - [ ] Check what USPS/Google considers correct for the building.
 - [ ] Use that exact string everywhere. One-line change in
@@ -52,9 +52,9 @@ The site currently says `4201 62nd North Unit 9`. The postal-standard form is
 The website says:
 
 ```
-Tue–Fri  8:30 AM – 5:30 PM
-Sat      9:00 AM – 4:00 PM
-Sun, Mon Closed
+Mon–Fri  9:00 AM – 8:00 PM
+Sat      9:00 AM – 7:00 PM
+Sun      9:00 AM – 3:00 PM
 ```
 
 Some public listings show substantially different hours, including evenings up

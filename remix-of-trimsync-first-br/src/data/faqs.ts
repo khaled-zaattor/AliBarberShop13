@@ -41,17 +41,17 @@ export const SITE_FAQS: ServiceFaq[] = [
   {
     question: "How long does a haircut take?",
     answer:
-      "About 30 minutes for a haircut, 45 for a haircut and beard together, and 20 for a beard trim or a line-up. A detailed skin fade can run a little longer.",
+      "About 30 minutes for a haircut, 45 for a haircut and beard together, 30 for the Beard Line Up & Shave, and 20 for a Full Edge. A detailed skin fade can run a little longer.",
   },
   {
     question: "What are your hours?",
     answer:
-      "Tuesday to Friday, 8:30 AM to 5:30 PM, and Saturday from 9:00 AM to 4:00 PM. The shop is closed Sunday and Monday.",
+      "We're open seven days a week: Monday to Friday 9:00 AM to 8:00 PM, Saturday 9:00 AM to 7:00 PM, and Sunday 9:00 AM to 3:00 PM.",
   },
   {
     question: "Where is Ali's Barber Shop located?",
     answer:
-      "4201 62nd North Unit 9, Pinellas Park, FL 33781. It's a short drive from Lealman, Kenneth City and north St. Petersburg.",
+      "4201 62nd Ave N, Unit 9, Pinellas Park, FL 33781. It's a short drive from Lealman, Kenneth City and north St. Petersburg.",
   },
   {
     question: "Is there parking?",

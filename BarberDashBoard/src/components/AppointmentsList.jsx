@@ -39,6 +39,8 @@ const AppointmentsList = () => {
   const [syncingVisits, setSyncingVisits] = useState(false);
   const [lastVisitUpdate, setLastVisitUpdate] = useState(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
 
   const [filters, setFilters] = useState({
     date: new Date().toISOString().split('T')[0],
@@ -47,12 +49,13 @@ const AppointmentsList = () => {
   });
 
   // ── Fetch ───────────────────────────────────────────────
-  const fetchAppointments = useCallback(async (filterOverride = null) => {
+  const fetchAppointments = useCallback(async (filterOverride = null, pageOverride = null) => {
     setLoading(true);
     setLoadError(false);
     try {
       const activeFilters = filterOverride || filters;
-      const params = {};
+      const activePage = pageOverride !== null ? pageOverride : (filterOverride ? 1 : page);
+      const params = { page: activePage };
       if (activeFilters.date)       params.date       = activeFilters.date;
       if (activeFilters.barber_id)  params.barber_id  = activeFilters.barber_id;
       if (activeFilters.status)     params.status     = activeFilters.status;
@@ -63,6 +66,11 @@ const AppointmentsList = () => {
       const res = await api.get('/api/admin/appointments', { params });
       const records = extractData(res);
       setAppointments(records);
+
+      const meta = res.data?.data?.meta;
+      if (meta) {
+        setPagination({ current_page: meta.current_page, last_page: meta.last_page, total: meta.total });
+      }
 
       const summaryUpdates = records
         .flatMap((appointment) => [
@@ -84,7 +92,7 @@ const AppointmentsList = () => {
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, page]);
 
   useEffect(() => {
     api.get('/api/admin/barbers').then((r) => setBarbers(extractData(r))).catch(() => {});
@@ -111,9 +119,8 @@ const AppointmentsList = () => {
         ? new Date(result.calculated_at).toLocaleString()
         : 'just now';
       toast.success(
-        `Visit counts updated: ${result.processed_new_phone ?? 0} phone, `
-        + `${result.processed_new_email ?? 0} email; `
-        + `${result.skipped_invalid ?? 0} invalid skipped. Calculated ${calculationTime}.`,
+        `Visit counts updated: ${result.linked_appointments ?? 0} appointment(s) linked to clients. `
+        + `Calculated ${calculationTime}.`,
       );
     } catch (error) {
       await fetchAppointments(EMPTY_FILTERS);
@@ -175,9 +182,15 @@ const AppointmentsList = () => {
   };
 
   // ── Filter change ───────────────────────────────────────
-  const setFilter = (key, val) => setFilters((f) => ({ ...f, [key]: val }));
+  const setFilter = (key, val) => {
+    setPage(1);
+    setFilters((f) => ({ ...f, [key]: val }));
+  };
 
-  const clearFilters = () => setFilters({ ...EMPTY_FILTERS });
+  const clearFilters = () => {
+    setPage(1);
+    setFilters({ ...EMPTY_FILTERS });
+  };
 
   const hasFilters = Object.values(filters).some(Boolean);
 
@@ -186,7 +199,9 @@ const AppointmentsList = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">Appointments</h1>
-          <p className="page-subtitle">{appointments.length} record{appointments.length !== 1 ? 's' : ''} found</p>
+          <p className="page-subtitle">
+            {pagination ? pagination.total : appointments.length} record{(pagination ? pagination.total : appointments.length) !== 1 ? 's' : ''} found
+          </p>
         </div>
         <div className="appointment-header-actions">
           {canSyncVisitCounts && (
@@ -363,6 +378,7 @@ const AppointmentsList = () => {
                         <div className="appointment-cell-value">
                           <div className="appointment-customer-name">
                             {appt.customer_name || appt.name || '—'}
+                            {appt.is_new_customer && <span className="visit-count-new">New</span>}
                           </div>
                           <div className="appointment-secondary">
                             {appt.customer_email || appt.email || ''}
@@ -429,6 +445,29 @@ const AppointmentsList = () => {
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* ── Pagination ── */}
+        {pagination && pagination.last_page > 1 && (
+          <div className="pagination-bar">
+            <button
+              className="btn btn-ghost btn-sm"
+              disabled={pagination.current_page <= 1}
+              onClick={() => setPage((p) => p - 1)}
+            >
+              ← Previous
+            </button>
+            <span className="pagination-info">
+              Page {pagination.current_page} of {pagination.last_page}
+            </span>
+            <button
+              className="btn btn-ghost btn-sm"
+              disabled={pagination.current_page >= pagination.last_page}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Next →
+            </button>
           </div>
         )}
       </div>

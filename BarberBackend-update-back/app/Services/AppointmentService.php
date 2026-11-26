@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\DB;
 class AppointmentService
 {
     public function __construct(
-        private readonly AvailabilityService $availabilityService
+        private readonly AvailabilityService $availabilityService,
+        private readonly ClientService $clientService
     ) {}
 
     public function createAppointment(array $data): Appointment
@@ -71,7 +72,15 @@ class AppointmentService
             ], 409));
         }
 
+        ['client' => $client, 'is_new' => $isNewCustomer] = $this->clientService->resolveForBooking(
+            $data['customer_name'],
+            $data['customer_email'],
+            $data['customer_phone']
+        );
+
         $appointment = Appointment::create([
+            'client_id'        => $client?->id,
+            'is_new_customer'  => $isNewCustomer,
             'customer_name'    => $data['customer_name'],
             'customer_email'   => $data['customer_email'],
             'customer_phone'   => $data['customer_phone'],
@@ -98,6 +107,7 @@ class AppointmentService
         $appointment->services()->attach($pivotData);
 
         Service::whereIn('id', $data['service_ids'])->increment('booking_count');
+        $this->clientService->recordBooking($appointment);
 
         return $appointment;
     }
@@ -110,14 +120,18 @@ class AppointmentService
             $updateData['completed_at'] = now();
         }
 
+        $previousStatus = $appointment->status;
         $appointment->update($updateData);
+        $this->clientService->recordStatusChange($appointment, $previousStatus);
 
         return $appointment->fresh(['barber', 'service', 'services']);
     }
 
     public function cancelAppointment(Appointment $appointment): Appointment
     {
+        $previousStatus = $appointment->status;
         $appointment->update(['status' => 'cancelled']);
+        $this->clientService->recordStatusChange($appointment, $previousStatus);
 
         return $appointment->fresh(['barber', 'service', 'services']);
     }

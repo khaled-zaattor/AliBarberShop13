@@ -3,6 +3,7 @@ import { ABOUT } from "@/data/about";
 import { GALLERY } from "@/data/gallery";
 import type { ServiceFaq, StaticService } from "@/data/services";
 import { SERVICES, ADDONS } from "@/data/services";
+import type { AreaPage } from "@/data/areas";
 
 // JSON-LD generators. All pure functions over src/data/*, so the structured data
 // cannot disagree with what the page actually renders — which is the single most
@@ -209,6 +210,26 @@ export function person() {
     knowsLanguage: ABOUT.languages,
     knowsAbout: ABOUT.specialties,
     ...(ABOUT.photo ? { image: abs(ABOUT.photo.src) } : {}),
+  };
+}
+
+/**
+ * WebPage for a nearby-area page. `about` points at the one real business and
+ * `spatialCoverage` names the area the page is for — it describes who the page
+ * serves without claiming the business has an address there.
+ */
+export function areaWebPage(a: AreaPage) {
+  const url = `${SITE_URL}/areas/${a.slug}/`;
+  return {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: a.meta.title,
+    description: a.meta.description,
+    inLanguage: "en-US",
+    isPartOf: { "@id": ID.website },
+    about: { "@id": ID.business },
+    spatialCoverage: { "@type": "Place", name: a.placeName },
   };
 }
 

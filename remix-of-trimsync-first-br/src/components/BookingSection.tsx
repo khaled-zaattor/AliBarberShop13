@@ -320,13 +320,15 @@ const BookingSection = forwardRef<BookingSectionHandle, {
     mutationFn: api.bookAppointment,
     onSuccess: (res, variables) => {
       // GTM event for Google Ads: builds the "booked customers" audience that
-      // campaigns exclude, and sends user_data for Enhanced Conversions.
+      // campaigns exclude, sends user_data for Enhanced Conversions, and
+      // new_customer for the Customer Acquisition goal.
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "booking_completed",
         transaction_id: res.data.booking_reference,
         value: Number(res.data.total_price),
         currency: "USD",
+        new_customer: res.data.is_new_customer === true,
         user_data: {
           email: variables.customer_email.toLowerCase(),
           phone_number: toE164(variables.customer_phone),

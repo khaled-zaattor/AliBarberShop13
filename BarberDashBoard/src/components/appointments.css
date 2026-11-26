@@ -3,6 +3,20 @@
   min-width: 0;
 }
 
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: var(--text-muted, #718096);
+}
+
 .appointment-cell-value,
 .appointment-detail-page .appt-grid > *,
 .appointment-services,

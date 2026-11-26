@@ -6,6 +6,9 @@ import About from "@/pages/About";
 import Faq from "@/pages/Faq";
 import Gallery from "@/pages/Gallery";
 import Contact from "@/pages/Contact";
+import Areas from "@/pages/Areas";
+import AreaDetail from "@/pages/AreaDetail";
+import { AREAS, areaPath } from "@/data/areas";
 import type { RouteMeta } from "@/lib/seo/head";
 import { SITE_FAQS } from "@/data/faqs";
 import { SERVICE_PAGES } from "@/data/services";
@@ -72,6 +75,31 @@ const serviceRoutes: RouteDef[] = SERVICE_PAGES.map((s) => {
   };
 });
 
+const AREAS_CRUMB = { name: "Areas We Serve", url: "/areas/" };
+
+/** One route per nearby area in src/data/areas.ts. */
+const areaRoutes: RouteDef[] = AREAS.map((a) => {
+  const path = areaPath(a);
+  return {
+    path,
+    element: <AreaDetail area={a} />,
+    meta: {
+      path,
+      title: a.meta.title,
+      description: a.meta.description,
+      schema: [
+        schema.barberShop(),
+        schema.areaWebPage(a),
+        ...(a.faqs.length >= 2 ? [schema.faqPage(a.faqs)] : []),
+        schema.breadcrumb([HOME_CRUMB, AREAS_CRUMB, { name: a.name, url: path }]),
+      ],
+      lastmod: a.lastmod,
+      priority: a.focus ? 0.7 : 0.5,
+      changefreq: "monthly",
+    },
+  };
+});
+
 export const routes: RouteDef[] = [
   {
     path: "/",
@@ -99,7 +127,8 @@ export const routes: RouteDef[] = [
         { src: "/hero-barber.jpg", caption: "Barber giving a precision fade at Ali's Barber Shop in Pinellas Park, FL" },
         ...galleryImages,
       ],
-      lastmod: LASTMOD_ABOUT_UPDATE,
+      // 2026-11-21: service-area section now links the nearby-area pages.
+      lastmod: "2026-11-21",
       priority: 1.0,
       changefreq: "weekly",
     },
@@ -132,7 +161,7 @@ export const routes: RouteDef[] = [
       path: "/about-ali/",
       title: `Meet ${ABOUT.name} — Barber in Pinellas Park, FL | Ali's Barber Shop`,
       description:
-        "Meet Ali, the barber at Ali's Barber Shop in Pinellas Park, FL. Eight years of experience — fades, beard work and scissor cuts, in English or Arabic.",
+        "Meet Ali, the barber at Ali's Barber Shop in Pinellas Park, FL. Nearly 15 years of experience — fades, beard work and scissor cuts, in English or Arabic.",
       ogType: "profile",
       image: ABOUT.photo?.src,
       images: ABOUT.photo ? [{ src: ABOUT.photo.src, caption: ABOUT.photo.alt }] : [],
@@ -190,13 +219,34 @@ export const routes: RouteDef[] = [
   },
 
   {
+    path: "/areas/",
+    element: <Areas />,
+    meta: {
+      path: "/areas/",
+      title:
+        "Areas We Serve — Barber Near Lealman, Largo, Seminole & St. Pete | Ali's Barber Shop",
+      description:
+        "Ali's Barber Shop is in Pinellas Park, FL, a short drive from Lealman, Kenneth City, Disston Heights, St. Petersburg, Seminole and Largo. Directions and drive times.",
+      schema: [
+        schema.barberShop(),
+        schema.breadcrumb([HOME_CRUMB, AREAS_CRUMB]),
+      ],
+      lastmod: "2026-11-21",
+      priority: 0.7,
+      changefreq: "monthly",
+    },
+  },
+
+  ...areaRoutes,
+
+  {
     path: "/contact/",
     element: <Contact />,
     meta: {
       path: "/contact/",
       title: "Contact & Directions — Pinellas Park, FL | Ali's Barber Shop",
       description:
-        "Ali's Barber Shop, 4201 62nd North Unit 9, Pinellas Park, FL 33781. Free parking, Tue–Fri 8:30–5:30, Sat 9–4. Call or text 813-895-9229.",
+        "Ali's Barber Shop, 4201 62nd Ave N, Unit 9, Pinellas Park, FL 33781. Free parking, Mon–Fri 9–8, Sat 9–7, Sun 9–3. Call or text 813-895-9229.",
       schema: [
         schema.barberShop(),
         schema.breadcrumb([HOME_CRUMB, { name: "Contact", url: "/contact/" }]),

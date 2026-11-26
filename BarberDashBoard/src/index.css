@@ -290,6 +290,18 @@ tbody tr:hover { background: #f8fafc; }
   color: #a0aec0;
 }
 
+.visit-count-new {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: #f0fff4;
+  border: 1px solid #c6f6d5;
+  color: #2f855a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
 /* ── Appointment Detail Grid ────────────────────────────── */
 .appt-grid {
   display: grid;

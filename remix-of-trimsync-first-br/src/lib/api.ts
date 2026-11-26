@@ -129,6 +129,7 @@ export interface AppointmentResponse {
     duration_minutes: number;
     total_price: number;
     status: string;
+    is_new_customer: boolean | null;
     barber: { id: number; name: string };
     service: { id: number; name: string; duration_minutes: number; price: string } | null;
     services: { id: number; name: string; duration_minutes: number; price: string }[];

@@ -10,7 +10,7 @@ const About = () => (
     intro={
       <p>
         {ABOUT.jobTitle} at {BUSINESS.name} in {BUSINESS.address.city},{" "}
-        {BUSINESS.address.region}. Eight years behind the chair, fades, beard
+        {BUSINESS.address.region}. Nearly 15 years behind the chair, fades, beard
         work and scissor cuts — in English or Arabic.
       </p>
     }
@@ -34,6 +34,9 @@ const About = () => (
               {...({ fetchpriority: "high" } as React.ImgHTMLAttributes<HTMLImageElement>)}
             />
           )}
+          <h2 className="font-display text-foreground text-2xl uppercase tracking-wide mb-6">
+            {ABOUT.bioHeading}
+          </h2>
           {ABOUT.bio.map((paragraph, i) => (
             <p
               key={i}
@@ -52,13 +55,16 @@ const About = () => (
         </div>
 
         <aside>
-          {ABOUT.yearsExperienceAbroad !== null && (
+          {ABOUT.yearsExperience !== null && (
             <div className="border-l-2 border-accent pl-4 mb-10">
+              <p className="font-body text-muted-foreground text-sm mb-2">
+                Nearly
+              </p>
               <p className="font-display text-accent text-5xl leading-none">
-                {ABOUT.yearsExperienceAbroad}
+                {ABOUT.yearsExperience}
               </p>
               <p className="font-body text-muted-foreground text-sm mt-2">
-                years as a barber before Pinellas Park
+                years as a barber
               </p>
             </div>
           )}

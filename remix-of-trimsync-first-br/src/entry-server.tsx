@@ -114,7 +114,9 @@ export function renderLlmsTxt(): string {
       (h) =>
         `- ${DAY_NAMES[h.day_of_week]}: ${fmtTime(h.open_time!)} – ${fmtTime(h.close_time!)}`
     ),
-    `- ${closed.map((h) => DAY_NAMES[h.day_of_week]).join(" and ")}: Closed`,
+    ...(closed.length
+      ? [`- ${closed.map((h) => DAY_NAMES[h.day_of_week]).join(" and ")}: Closed`]
+      : []),
   ].join("\n");
 
   const services = SERVICES.map(

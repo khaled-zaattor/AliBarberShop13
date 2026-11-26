@@ -15,6 +15,8 @@ class Appointment extends Model
 
     protected $fillable = [
         'booking_reference',
+        'client_id',
+        'is_new_customer',
         'customer_name',
         'customer_email',
         'customer_phone',
@@ -36,6 +38,7 @@ class Appointment extends Model
             'total_price'      => 'decimal:2',
             'checked_in_at'    => 'datetime',
             'completed_at'     => 'datetime',
+            'is_new_customer'  => 'boolean',
         ];
     }
 
@@ -55,6 +58,11 @@ class Appointment extends Model
         } while (static::where('booking_reference', $reference)->exists());
 
         return $reference;
+    }
+
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
     }
 
     public function barber(): BelongsTo
