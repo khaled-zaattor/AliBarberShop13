@@ -94,3 +94,68 @@ export const BUSINESS_HOURS: BusinessHours[] = [
   { day_of_week: 5, is_closed: false, open_time: "09:00:00", close_time: "20:00:00", slot_duration: 30 },
   { day_of_week: 6, is_closed: false, open_time: "09:00:00", close_time: "19:00:00", slot_duration: 30 },
 ];
+
+/**
+ * Holiday and other one-off hours. Add an entry before each holiday and keep it
+ * identical to the "Special hours" set on the Google Business Profile, or the
+ * two disagree on the day it matters most.
+ *
+ * Omit open/close to mark the shop closed that day. Past dates are ignored
+ * automatically, so old entries can stay until someone tidies up.
+ *
+ * Example:
+ *   { date: "2026-12-25", label: "Christmas Day" },                                  // closed
+ *   { date: "2026-12-24", label: "Christmas Eve", open: "09:00", close: "15:00" },
+ */
+export interface SpecialHours {
+  /** YYYY-MM-DD, shop local time. */
+  date: string;
+  label: string;
+  /** HH:MM, 24-hour. Leave both out when closed. */
+  open?: string;
+  close?: string;
+}
+
+export const HOLIDAY_HOURS: SpecialHours[] = [];
+
+/** Today's date in the shop's time zone as YYYY-MM-DD. */
+export const shopToday = (now: Date = new Date()): string =>
+  new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(now);
+
+/** Holiday entries from today onward, soonest first. */
+export const upcomingSpecialHours = (
+  list: SpecialHours[] = HOLIDAY_HOURS,
+  now: Date = new Date()
+): SpecialHours[] => {
+  const today = shopToday(now);
+  return list
+    .filter((h) => h.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date));
+};
+
+// "09:00" → "9:00 AM"
+const fmtTime = (t: string): string => {
+  const [h, m] = t.split(":").map(Number);
+  return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`;
+};
+
+/**
+ * "Christmas Eve (Thu, Dec 24): 9:00 AM – 3:00 PM". The date is formatted in
+ * UTC from noon so the weekday can't shift whatever the visitor's time zone.
+ */
+export const specialHoursLine = (h: SpecialHours): string => {
+  const day = new Date(`${h.date}T12:00:00Z`).toLocaleDateString("en-US", {
+    timeZone: "UTC",
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+  const when =
+    h.open && h.close ? `${fmtTime(h.open)} – ${fmtTime(h.close)}` : "Closed";
+  return `${h.label} (${day}): ${when}`;
+};

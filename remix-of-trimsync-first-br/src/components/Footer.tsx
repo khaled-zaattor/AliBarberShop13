@@ -1,4 +1,9 @@
-import { BUSINESS, addressLine } from "@/data/business";
+import {
+  BUSINESS,
+  addressLine,
+  specialHoursLine,
+  upcomingSpecialHours,
+} from "@/data/business";
 import { SERVICE_PAGES } from "@/data/services";
 import { AREAS, areaPath } from "@/data/areas";
 
@@ -93,6 +98,11 @@ const Footer = () => {
             <li>Mon–Fri: 9:00 AM – 8:00 PM</li>
             <li>Sat: 9:00 AM – 7:00 PM</li>
             <li>Sun: 9:00 AM – 3:00 PM</li>
+            {upcomingSpecialHours().map((h) => (
+              <li key={h.date} className="text-primary-foreground/80">
+                {specialHoursLine(h)}
+              </li>
+            ))}
           </ul>
           <a
             href="/#booking"

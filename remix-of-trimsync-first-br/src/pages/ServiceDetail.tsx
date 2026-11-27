@@ -15,7 +15,7 @@ const ServiceDetail = ({ service }: { service: StaticService }) => {
 
   return (
     <SiteLayout
-      title={service.name}
+      title={`${service.name} in ${BUSINESS.address.city}`}
       intro={
         <>
           <p className="text-primary-foreground text-xl">
