@@ -1,4 +1,9 @@
-import { BUSINESS, BUSINESS_HOURS, SITE_URL } from "@/data/business";
+import {
+  BUSINESS,
+  BUSINESS_HOURS,
+  SITE_URL,
+  upcomingSpecialHours,
+} from "@/data/business";
 import { ABOUT } from "@/data/about";
 import { GALLERY } from "@/data/gallery";
 import type { ServiceFaq, StaticService } from "@/data/services";
@@ -90,6 +95,10 @@ export function barberShop() {
       opens: hhmm(h.open_time!),
       closes: hhmm(h.close_time!),
     })),
+    // Holiday hours. A closed day is expressed as opens = closes = "00:00",
+    // which is how schema.org documents it. Omitted entirely when there are
+    // none, rather than emitting an empty array.
+    ...specialHours(),
     // sameAs is what lets an entity-resolution engine decide that the Instagram
     // account, the Facebook page and this website are one business rather than
     // three. Keep every profile listed here.
@@ -99,6 +108,21 @@ export function barberShop() {
       BUSINESS.socials.tiktok,
     ],
     hasOfferCatalog: serviceCatalog(),
+  };
+}
+
+function specialHours() {
+  const list = upcomingSpecialHours();
+  if (list.length === 0) return {};
+  return {
+    specialOpeningHoursSpecification: list.map((h) => ({
+      "@type": "OpeningHoursSpecification",
+      name: h.label,
+      validFrom: h.date,
+      validThrough: h.date,
+      opens: h.open ?? "00:00",
+      closes: h.close ?? "00:00",
+    })),
   };
 }
 

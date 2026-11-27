@@ -55,7 +55,8 @@ export interface StaticService {
   lastmod: string;
 }
 
-const LASTMOD = "2026-09-20";
+// 2026-11-27: service page H1s now name the city ("Men's Haircut in Pinellas Park").
+const LASTMOD = "2026-11-27";
 
 export const SERVICES: StaticService[] = [
   // ─── Haircuts ──────────────────────────────────────────────────────────────

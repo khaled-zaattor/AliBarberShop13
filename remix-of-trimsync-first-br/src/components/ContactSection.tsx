@@ -1,7 +1,12 @@
 import { MapPin, Phone, Clock, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { api, type BusinessHours } from "@/lib/api";
-import { BUSINESS, BUSINESS_HOURS } from "@/data/business";
+import {
+  BUSINESS,
+  BUSINESS_HOURS,
+  specialHoursLine,
+  upcomingSpecialHours,
+} from "@/data/business";
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -69,6 +74,7 @@ const ContactSection = () => {
 
   const hours: BusinessHours[] = Array.isArray(rawHours) ? rawHours : BUSINESS_HOURS;
   const hoursRows = buildHoursRows(hours);
+  const holidayRows = upcomingSpecialHours().map(specialHoursLine);
 
   return (
     <section id="contact" className="py-24 section-padding bg-secondary">
@@ -130,6 +136,18 @@ const ContactSection = () => {
                     {row}
                   </p>
                 ))}
+                {holidayRows.length > 0 && (
+                  <div className="mt-3">
+                    <p className="font-body text-sm text-secondary-foreground font-medium">
+                      Holiday hours
+                    </p>
+                    {holidayRows.map((row) => (
+                      <p key={row} className="font-body text-sm text-muted-foreground">
+                        {row}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
